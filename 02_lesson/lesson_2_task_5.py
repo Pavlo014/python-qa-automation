@@ -12,6 +12,7 @@ def month_to_season(month):
     else:
         return "Неверный номер месяца"
 
+
 # для тестирования функции используем: print(month_to_season(номер месяца))
 print(month_to_season(2))
 print(month_to_season(4))
