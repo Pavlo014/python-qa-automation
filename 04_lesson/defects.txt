@@ -1,0 +1,53 @@
+Баг‑репорт №1
+Компонент: StringUtils.contains()
+Приоритет: Высокий
+Статус: Новый
+Автор: [Ваше имя/роль]
+Дата: 2025‑11‑01
+
+1. Краткое описание
+    Метод contains(string: str, symbol: str) -> bool возвращает True при поиске пустой строки ("") в непустой строке, что противоречит ожидаемому поведению и документации.
+
+2. Шаги для воспроизведения
+    - Создать экземпляр класса: string_utils = StringUtils()
+    - Вызвать метод: result = string_utils.contains("test", "")
+    - Проверить результат: print(result)  # Выводит `True`, но ожидается `False`
+
+3. Фактический результат
+    Для ввода ("test", "") метод возвращает True.
+
+4. Ожидаемый результат
+    Для ввода ("test", "") метод должен возвращать False, так как:
+    пустая строка не является «искомым символом» в контексте бизнес‑логики;
+    это соответствует тестовому сценарию test_contains_negative[test--False].
+
+5. Причина дефекта
+    В коде метода отсутствует явная проверка на пустой символ:
+    try:
+        res = string.index(symbol) > -1  # `index("")` всегда возвращает 0 для непустой строки
+    except ValueError:
+        pass
+
+6. Доказательства
+    - проваленый тест:
+        04_lesson/test_string_utils.py::test_contains_negative[test--False] FAILED
+
+    - лог:
+                string = 'test', symbol = '', expected = False
+
+            @pytest.mark.negative
+            @pytest.mark.parametrize("string, symbol, expected", [
+                ("SkyPro", "U", False),
+                ("Hello", "z", False),
+                ("", "a", False),
+                ("test", "", False),  # пустой символ
+                ("123", "x", False),
+            ])
+            def test_contains_negative(string, symbol, expected):
+                """Негативные тесты: символа нет, пустая строка, пустой символ."""
+        >       assert string_utils.contains(string, symbol) == expected
+        E       AssertionError: assert True == False
+        E        +  where True = contains('test', '')
+        E        +    where contains = <string_utils.StringUtils object at 0x000001C856D32CF0>.contains
+
+        04_lesson\test_string_utils.py:89: AssertionError
