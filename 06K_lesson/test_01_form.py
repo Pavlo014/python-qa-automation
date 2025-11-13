@@ -9,7 +9,8 @@ def test_form_validation():
     driver = webdriver.Edge()
 
     # 1. Открываем страницу
-    driver.get("https://bonigarcia.dev/selenium-webdriver-java/data-types.html")
+    url = "https://bonigarcia.dev/selenium-webdriver-java/data-types.html"
+    driver.get(url)
 
     # 2. Заполняем форму значениями
     driver.find_element(
@@ -47,15 +48,21 @@ def test_form_validation():
     # Ждем загрузки новой страницы
     wait = WebDriverWait(driver, 10)
 
-    # 4. Проверяем, что поле Zip code подсвечено красным
-    zip_code_alert = wait.until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, ".alert-danger"))
+    # 4. Проверяем, что поле Zip code подсвечено красным (по ID)
+    zip_code_field = wait.until(
+        EC.presence_of_element_located((By.ID, "zip-code"))
     )
-    assert zip_code_alert.text == "N/A"
+    assert "alert-danger" in zip_code_field.get_attribute("class")
 
     # 5. Проверяем, что остальные поля подсвечены зеленым
-    success_alerts = driver.find_elements(By.CSS_SELECTOR, ".alert-success")
-    assert len(success_alerts) == 9  # Все заполненные поля
+    success_fields_ids = [
+        "first-name", "last-name", "address", "e-mail", "phone",
+        "city", "country", "job-position", "company"
+    ]
+
+    for field_id in success_fields_ids:
+        field = driver.find_element(By.ID, field_id)
+        assert "alert-success" in field.get_attribute("class")
 
     # Закрываем браузер
     driver.quit()
