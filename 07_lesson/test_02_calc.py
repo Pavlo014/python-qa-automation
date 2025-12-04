@@ -17,9 +17,12 @@ def driver():
 def test_slow_calculator(driver):
     calculator_page = CalculatorPage(driver)
 
-    calculator_page.perform_calculation(45, "7", "+", "8", "=")
+    calculator_page.set_delay(45)
+    calculator_page.click_button("7")
+    calculator_page.click_button("+")
+    calculator_page.click_button("8")
+    calculator_page.click_button("=")
 
     result = calculator_page.get_result()
 
     assert result == "15", f"Ожидался результат 15, но получили {result}"
-    print(f"Тест успешно пройден! Результат: {result}")

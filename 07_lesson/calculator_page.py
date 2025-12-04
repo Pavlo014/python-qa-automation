@@ -8,25 +8,7 @@ class CalculatorPage:
         self.driver = driver
         self.delay_input = (By.ID, "delay")
         self.screen = (By.CLASS_NAME, "screen")
-        self.buttons = {
-            "0": (By.XPATH, "//span[text()='0']"),
-            "1": (By.XPATH, "//span[text()='1']"),
-            "2": (By.XPATH, "//span[text()='2']"),
-            "3": (By.XPATH, "//span[text()='3']"),
-            "4": (By.XPATH, "//span[text()='4']"),
-            "5": (By.XPATH, "//span[text()='5']"),
-            "6": (By.XPATH, "//span[text()='6']"),
-            "7": (By.XPATH, "//span[text()='7']"),
-            "8": (By.XPATH, "//span[text()='8']"),
-            "9": (By.XPATH, "//span[text()='9']"),
-            "+": (By.XPATH, "//span[text()='+']"),
-            "-": (By.XPATH, "//span[text()='-']"),
-            "×": (By.XPATH, "//span[text()='x']"),
-            "÷": (By.XPATH, "//span[text()='÷']"),
-            "=": (By.XPATH, "//span[text()='=']"),
-            ".": (By.XPATH, "//span[text()='.']"),
-            "C": (By.CLASS_NAME, "clear")
-        }
+        self.button_locator = "//span[text()='{}']"
 
     def set_delay(self, delay_value):
         delay_element = self.driver.find_element(*self.delay_input)
@@ -34,7 +16,8 @@ class CalculatorPage:
         delay_element.send_keys(str(delay_value))
 
     def click_button(self, button):
-        button_element = self.driver.find_element(*self.buttons[button])
+        locator = (By.XPATH, self.button_locator.format(button))
+        button_element = self.driver.find_element(*locator)
         button_element.click()
 
     def get_result(self, timeout=50):
@@ -43,8 +26,3 @@ class CalculatorPage:
         )
         result_element = self.driver.find_element(*self.screen)
         return result_element.text
-
-    def perform_calculation(self, delay, *buttons):
-        self.set_delay(delay)
-        for button in buttons:
-            self.click_button(button)

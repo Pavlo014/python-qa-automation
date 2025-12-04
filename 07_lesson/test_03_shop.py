@@ -54,5 +54,3 @@ def test_purchase_flow(driver):
     assert total_amount == "58.29", (
         f"Ожидалась сумма $58.29, но получили ${total_amount}"
     )
-
-    print(f"Тест успешно пройден! Итоговая сумма: ${total_amount}")
