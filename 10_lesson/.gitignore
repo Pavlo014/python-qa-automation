@@ -1,0 +1,15 @@
+# Временные файлы и папки от Allure
+allure-results/
+allure-report/
+
+# Файлы от IDE (например, VS Code)
+.vscode/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Временные файлы ОС
+.DS_Store  # Для macOS
+Thumbs.db  # Для Windows
